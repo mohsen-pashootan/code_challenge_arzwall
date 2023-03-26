@@ -1,0 +1,208 @@
+* {
+  outline: none !important;
+  font-family: Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+:root {
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+// html {
+//   font-size: 14px;
+// }
+
+body {
+  margin: 0px;
+  background-color: white;
+  color: black;
+  transition: all 0.3s;
+  text-align: right;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 300;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  overflow-clip-margin: content-box;
+  overflow: clip;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  background-color: initial;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+input {
+  font-family: yekanbakh;
+}
+
+button {
+  background: none;
+  padding: 6px 16px;
+  color: inherit;
+}
+
+button:disabled,
+button[disabled] {
+  opacity: 0.5;
+  color: initial;
+}
+
+button,
+button:hover {
+  border: none;
+  outline: none;
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+button,
+input {
+  overflow: visible;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+hr {
+  margin: 1rem 0;
+  color: inherit;
+  background-color: currentColor;
+  border: 0;
+  opacity: 0.25;
+}
+
+hr:not([size]) {
+  height: 1px;
+}
+
+.row .col {
+  float: right;
+}
+
+.row-left {
+  .col {
+    float: left;
+  }
+}
+
+.backdrop {
+  background-color: white;
+}
+
+* {
+  @include scrollStyles;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  margin: 5px;
+  padding: 5px;
+  float: left;
+}
+
+::-webkit-scrollbar-track {
+  margin: 5px;
+  padding: 5px;
+}
+
+::-moz-scrollbar-track {
+  background: white;
+  margin: 5px;
+  padding: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d2d2d9;
+  margin: 5px;
+  padding: 5px;
+}
+
+::-moz-scrollbar-thumb {
+  background: white;
+  margin: 5px;
+  padding: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bbbbc6;
+  padding: 5px;
+}
+
+::-moz-scrollbar-thumb:hover {
+  background: white;
+  padding: 5px;
+}

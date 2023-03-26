@@ -1,0 +1,5 @@
+.searchInputBox {
+  @include respond(phone) {
+    width: 100% !important;
+  }
+}
