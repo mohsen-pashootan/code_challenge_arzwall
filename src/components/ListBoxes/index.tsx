@@ -1,20 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../hooks/hooks";
 import ApiListBox from "../ApiListBox/index";
 import SelectedListBox from "../SelectedListBox/index";
-import { clearSelectedData } from "./../../stateManager/actions";
-import { ASSET_DATA, getPostsList, getUsersContact } from "./asset";
+import { getPostsList, getUsersContact } from "./asset";
 import { useQuery } from "react-query";
-
-type ObjectKey = keyof typeof ASSET_DATA;
+import {
+  addUsersList,
+  removeUsersList,
+  usersListState,
+} from "../../stateManager/usersContact/reducer";
+import {
+  addPostsList,
+  postsListState,
+  removepostsList,
+} from "../../stateManager/postsListData/reducer";
+import {
+  removeSelectedList,
+  selectedListState,
+} from "../../stateManager/selectedListData/reducer";
 
 export default function ListBoxes() {
   const dispatch = useAppDispatch();
+  const usersList = useSelector(usersListState);
+  const postsList = useSelector(postsListState);
+  const selectedList = useSelector(selectedListState);
 
-  const selectedList = useSelector(
-    (state: ROOTSTATE) => state.selectedListData.selectedList
-  );
   const _queryOptions = { enabled: false, retry: 1 };
   const {
     data: usersData,
@@ -30,37 +41,49 @@ export default function ListBoxes() {
   } = useQuery(["post_list"], getPostsList, _queryOptions);
 
   const hanldeGetData = async (listName: string) => {
-    const _listName = listName as ObjectKey;
-    if (_listName === "users_contact") fetchUsersContact();
-    else if (_listName === "post_list") fetchPostsList();
+    if (listName === "users_contact") fetchUsersContact();
+    else if (listName === "post_list") fetchPostsList();
   };
 
   const handleClearList = (listName: string) => {
-    const _listName = listName as ObjectKey;
-    if (_listName === "users_contact") {
+    if (listName === "users_contact") {
       rmUsersContact();
-    } else if (_listName === "post_list") {
+      dispatch(removeUsersList());
+    } else if (listName === "post_list") {
       rmPostsList();
+      dispatch(removepostsList());
     }
   };
 
   const handleDeleteSelected = (item: SINGLESELECT) => {
-    dispatch(clearSelectedData(item));
+    dispatch(removeSelectedList(item));
   };
+
+  useEffect(() => {
+    if (usersData && usersData.length) {
+      dispatch(addUsersList(usersData));
+    }
+  }, [usersData]);
+
+  useEffect(() => {
+    if (postsData && postsData.length) {
+      dispatch(addPostsList(postsData));
+    }
+  }, [postsData]);
 
   return (
     <div className="c-listBoxes">
       <ApiListBox
         listName="users_contact"
         fetchCall={hanldeGetData}
-        dataList={usersData}
+        dataList={usersList}
         loading={userIsLoading}
         onClearList={handleClearList}
       />
       <ApiListBox
         listName="post_list"
         fetchCall={hanldeGetData}
-        dataList={postsData}
+        dataList={postsList}
         loading={postIsLoading}
         onClearList={handleClearList}
       />

@@ -1,48 +1,28 @@
-import { ACTIONS } from "../ActionTypes";
-import { AnyAction } from "redux";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../redux/store";
 
 const initialState: POSTSLISTDATA = {
   postsList: [],
-  loading: false,
-  errorResponse: "",
 };
 
-export function postsListData(state = initialState, action: AnyAction) {
-  return (ACTION_HANDLERS[action.type] || (() => state))(state, action.payload);
-}
+export const postsSlice = createSlice({
+  name: "postsList",
+  initialState,
+  // The `reducers` field lets us define reducers and generate associated actions
+  reducers: {
+    // Use the PayloadAction type to declare the contents of `action.payload`
+    addPostsList: (state, action: PayloadAction<DATALIST[]>) => {
+      state.postsList = action.payload;
+    },
+    removepostsList: (state) => {
+      state.postsList = [];
+    },
+  },
+});
 
-const ACTION_HANDLERS = {
-  [ACTIONS.POSTS_DATA_LIST_LOADING]: handleLoading,
-  [ACTIONS.REJECT_ERROR]: handleError,
-  [ACTIONS.POSTS_DATA_LIST]: handlePostsData,
-  [ACTIONS.CLEAR_POSTS_DATA_LIST]: handleClearPostsData,
-};
+export const { addPostsList, removepostsList } = postsSlice.actions;
 
-function handleLoading(state: POSTSLISTDATA, payload: boolean) {
-  return { ...state, loading: payload };
-}
+export const postsListState = (state: RootState) =>
+  state.postsListData.postsList;
 
-function handleError(state: POSTSLISTDATA, payload: string | any) {
-  return {
-    ...state,
-    loading: false,
-    postsList: [],
-    errorResponse: payload,
-  };
-}
-
-function handlePostsData(state: POSTSLISTDATA, payload: POSTSRESPONSE[]) {
-  const customPostData = payload.map((item) => ({
-    id: item.id,
-    title: item.title,
-    avatar: "",
-    description: item.body,
-  }));
-  return { ...state, loading: false, postsList: customPostData };
-}
-
-function handleClearPostsData(state: POSTSLISTDATA, payload: any[]) {
-  return { ...state, loading: false, postsList: payload, errorResponse: "" };
-}
-
-export default postsListData;
+export default postsSlice.reducer;

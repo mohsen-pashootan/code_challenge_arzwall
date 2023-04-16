@@ -45,15 +45,11 @@ interface SELECTEDLIST {
 }
 
 interface USERSCONTACT {
-  usersList: any[];
-  loading: boolean;
-  errorResponse: string;
+  usersList: DATALIST[];
 }
 
 interface POSTSLISTDATA {
   postsList: any[];
-  loading: boolean;
-  errorResponse: string;
 }
 
 interface SINGLESELECTEDDATA {

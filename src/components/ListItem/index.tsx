@@ -5,16 +5,16 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import ImageIcon from "@mui/icons-material/Image";
 import ListItemButton from "@mui/material/ListItemButton";
-import { useDispatch } from "react-redux";
-import { addSelectedData } from "./../../stateManager/actions";
 import { UID } from "../../helpers/helper";
+import { addSelectedList } from "../../stateManager/selectedListData/reducer";
+import { useAppDispatch } from "../../hooks/hooks";
 
 export default function SingleListItem(props: SINGLEITEMPROP) {
   const { title, description, avatar } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleItemClick = () => {
-    dispatch(addSelectedData({ id: UID(), title }));
+    dispatch(addSelectedList({ id: UID(), title }));
   };
 
   return (

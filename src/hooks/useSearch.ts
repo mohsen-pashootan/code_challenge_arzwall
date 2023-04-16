@@ -22,7 +22,7 @@ export default function useSearch({ listArr, searchQuery = "" }: USESEARCH) {
 
   useEffect(() => {
     if (!listArr.length) {
-      return;
+      setResultListArr([]);
     } else {
       if (searchValue) {
         let filteredUsers = listArr?.filter(

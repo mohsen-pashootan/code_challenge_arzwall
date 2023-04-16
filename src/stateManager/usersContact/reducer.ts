@@ -1,49 +1,35 @@
-import { ACTIONS } from "../ActionTypes";
-import { AnyAction } from "redux";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../redux/store";
 import { avatars } from "../../helpers/avatars";
 
 const initialState: USERSCONTACT = {
   usersList: [],
-  loading: false,
-  errorResponse: "",
 };
 
-export function usersContact(state = initialState, action: AnyAction) {
-  return (ACTION_HANDLERS[action.type] || (() => state))(state, action.payload);
-}
+export const usersSlice = createSlice({
+  name: "usersList",
+  initialState,
+  // The `reducers` field lets us define reducers and generate associated actions
+  reducers: {
+    // Use the PayloadAction type to declare the contents of `action.payload`
+    addUsersList: (state, action: PayloadAction<USERSCONTACTRESPONSE[]>) => {
+      const customUserData = action.payload.map((item, index: number) => ({
+        id: item.id,
+        title: item.name,
+        avatar: avatars[index],
+        description: item.email,
+      }));
+      state.usersList = customUserData;
+    },
+    removeUsersList: (state) => {
+      state.usersList = [];
+    },
+  },
+});
 
-const ACTION_HANDLERS = {
-  [ACTIONS.USER_DATA_LIST_LOADING]: handleLoading,
-  [ACTIONS.USER_DATA_LIST]: handleUserData,
-  [ACTIONS.REJECT_ERROR]: handleError,
-  [ACTIONS.CLEAR_USER_DATA_LIST]: handleClearUserData,
-};
+export const { addUsersList, removeUsersList } = usersSlice.actions;
 
-function handleLoading(state: USERSCONTACT, payload: boolean) {
-  return { ...state, loading: payload };
-}
+export const usersListState = (state: RootState) =>
+  state.usersContact.usersList;
 
-function handleUserData(state: USERSCONTACT, payload: USERSCONTACTRESPONSE[]) {
-  const customUserData = payload.map((item, index) => ({
-    id: item.id,
-    title: item.name,
-    avatar: avatars[index],
-    description: item.email,
-  }));
-  return { ...state, loading: false, usersList: customUserData };
-}
-
-function handleError(state: USERSCONTACT, payload: string | any) {
-  return {
-    ...state,
-    loading: false,
-    usersList: [],
-    errorResponse: payload,
-  };
-}
-
-function handleClearUserData(state: USERSCONTACT, payload: any[]) {
-  return { ...state, loading: false, usersList: payload, errorResponse: "" };
-}
-
-export default usersContact;
+export default usersSlice.reducer;
