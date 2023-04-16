@@ -5,9 +5,9 @@ import Box from "@mui/material/Box";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function EmptyStateList({
-  listName,
-  onGetData,
+  fetchCall,
   loading,
+  listName,
 }: EmptyStateList) {
   return (
     <Box
@@ -26,7 +26,7 @@ export default function EmptyStateList({
         Click the Button to get data
       </Typography>
       <LoadingButton
-        onClick={() => onGetData(listName)}
+        onClick={() => fetchCall(listName)}
         loading={loading}
         sx={{
           marginTop: "10px",

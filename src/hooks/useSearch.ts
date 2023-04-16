@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import debounce from "lodash/debounce";
 import { isExist } from "../helpers/helper";
 
-export default function useSearch({
-  listArr = [],
-  searchQuery = "",
-}: USESEARCH) {
+export default function useSearch({ listArr, searchQuery = "" }: USESEARCH) {
   const [searchValue, setSearchValue] = useState("");
   const [resultListArr, setResultListArr] = useState<DATALIST[]>([]);
 
@@ -24,16 +21,20 @@ export default function useSearch({
   }, [searchQuery]);
 
   useEffect(() => {
-    if (searchValue) {
-      let filteredUsers = listArr.filter(
-        (u) =>
-          isExist(u?.title?.toLowerCase(), searchValue) ||
-          isExist(u?.description?.toLowerCase(), searchValue)
-      );
-      setResultListArr(filteredUsers);
+    if (!listArr.length) {
+      return;
     } else {
-      let filteredUsers = listArr;
-      setResultListArr(filteredUsers);
+      if (searchValue) {
+        let filteredUsers = listArr?.filter(
+          (u) =>
+            isExist(u?.title?.toLowerCase(), searchValue) ||
+            isExist(u?.description?.toLowerCase(), searchValue)
+        );
+        setResultListArr(filteredUsers);
+      } else {
+        let filteredUsers = listArr;
+        setResultListArr(filteredUsers);
+      }
     }
   }, [searchValue, listArr]);
 

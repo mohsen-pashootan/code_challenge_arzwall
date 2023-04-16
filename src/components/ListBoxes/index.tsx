@@ -3,37 +3,45 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../hooks/hooks";
 import ApiListBox from "../ApiListBox/index";
 import SelectedListBox from "../SelectedListBox/index";
-import {
-  getInitData,
-  clearDataList,
-  clearSelectedData,
-} from "./../../stateManager/actions";
-import { ASSET_DATA } from "./asset";
+import { clearSelectedData } from "./../../stateManager/actions";
+import { ASSET_DATA, getPostsList, getUsersContact } from "./asset";
+import { useQuery } from "react-query";
 
 type ObjectKey = keyof typeof ASSET_DATA;
 
 export default function ListBoxes() {
   const dispatch = useAppDispatch();
-  const usersContact = useSelector((state: ROOTSTATE) => state.usersContact);
-  const postsListData = useSelector((state: ROOTSTATE) => state.postsListData);
+
   const selectedList = useSelector(
     (state: ROOTSTATE) => state.selectedListData.selectedList
   );
+  const _queryOptions = { enabled: false, retry: 1 };
+  const {
+    data: usersData,
+    isLoading: userIsLoading,
+    refetch: fetchUsersContact,
+    remove: rmUsersContact,
+  } = useQuery(["users_contact"], getUsersContact, _queryOptions);
+  const {
+    data: postsData,
+    isLoading: postIsLoading,
+    refetch: fetchPostsList,
+    remove: rmPostsList,
+  } = useQuery(["post_list"], getPostsList, _queryOptions);
 
   const hanldeGetData = async (listName: string) => {
     const _listName = listName as ObjectKey;
-    dispatch(
-      getInitData(
-        ASSET_DATA[_listName].api_url,
-        "get",
-        ASSET_DATA[_listName].getActionType
-      )
-    );
+    if (_listName === "users_contact") fetchUsersContact();
+    else if (_listName === "post_list") fetchPostsList();
   };
 
   const handleClearList = (listName: string) => {
     const _listName = listName as ObjectKey;
-    dispatch(clearDataList(ASSET_DATA[_listName].clearActionType));
+    if (_listName === "users_contact") {
+      rmUsersContact();
+    } else if (_listName === "post_list") {
+      rmPostsList();
+    }
   };
 
   const handleDeleteSelected = (item: SINGLESELECT) => {
@@ -44,16 +52,16 @@ export default function ListBoxes() {
     <div className="c-listBoxes">
       <ApiListBox
         listName="users_contact"
-        onGetData={hanldeGetData}
-        dataList={usersContact.usersList}
-        loading={usersContact.loading}
+        fetchCall={hanldeGetData}
+        dataList={usersData}
+        loading={userIsLoading}
         onClearList={handleClearList}
       />
       <ApiListBox
         listName="post_list"
-        onGetData={hanldeGetData}
-        dataList={postsListData.postsList}
-        loading={postsListData.loading}
+        fetchCall={hanldeGetData}
+        dataList={postsData}
+        loading={postIsLoading}
         onClearList={handleClearList}
       />
       <SelectedListBox

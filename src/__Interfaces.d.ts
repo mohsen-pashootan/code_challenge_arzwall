@@ -6,7 +6,7 @@ interface SINGLEITEMPROP {
 }
 
 interface GetData {
-  onGetData: (name: string) => void;
+  fetchCall: (name: string) => void;
 }
 
 interface EmptyStateList extends GetData {
@@ -23,7 +23,7 @@ interface DATALIST {
 
 interface ApiListBox extends EmptyStateList {
   listName: string;
-  dataList: DATALIST[];
+  dataList: DATALIST[] | undefined;
   loading: boolean;
   onClearList: (name: string) => void;
 }

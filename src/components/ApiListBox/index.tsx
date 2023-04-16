@@ -4,18 +4,17 @@ import TextField from "@mui/material/TextField";
 import SingleListItem from "../ListItem/index";
 import Button from "@mui/material/Button";
 import EmptyStateList from "../EmptyStateList/index";
-import ControlledListContainer from "./../ControlledListContainer/index";
-import { VirtualizedListItem } from "../VirtualizedListItem/index";
 import useSearch from "../../hooks/useSearch";
 import Typography from "@mui/material/Typography";
+import List from "@mui/material/List";
 
 const MemoApiListBox = React.memo(
   function ApiListBox({
     listName,
-    onGetData,
-    dataList,
+    fetchCall,
     loading,
     onClearList,
+    dataList,
   }: ApiListBox) {
     const [searchValue, setSearchValue] = useState("");
 
@@ -25,7 +24,7 @@ const MemoApiListBox = React.memo(
     };
 
     const { resultListArr, searchValue: searchValueData } = useSearch({
-      listArr: dataList,
+      listArr: dataList || [],
       searchQuery: searchValue,
     });
 
@@ -64,7 +63,8 @@ const MemoApiListBox = React.memo(
             display: "block",
           }}
         >
-          <ControlledListContainer
+          <List
+            classes={{ root: "listContainer" }}
             sx={{
               width: "400px",
               height: "600px",
@@ -75,16 +75,14 @@ const MemoApiListBox = React.memo(
               backgroundColor: "white",
               overflowY: "scroll",
             }}
-            dataSize={resultListArr.length}
-            dataList={resultListArr}
           >
-            {!resultListArr.length && !searchValueData ? (
+            {!resultListArr?.length && !searchValueData ? (
               <EmptyStateList
-                listName={listName}
-                onGetData={onGetData}
+                fetchCall={fetchCall}
                 loading={loading}
+                listName={listName}
               />
-            ) : !resultListArr.length && searchValueData ? (
+            ) : !resultListArr?.length && searchValueData ? (
               <Typography
                 sx={{
                   position: "absolute",
@@ -99,8 +97,8 @@ const MemoApiListBox = React.memo(
               >
                 No Results Found
               </Typography>
-            ) : resultListArr.length < 50 ? (
-              resultListArr.map((item) => (
+            ) : resultListArr?.length ? (
+              resultListArr?.map((item) => (
                 <SingleListItem
                   key={item.id}
                   title={item.title}
@@ -108,10 +106,8 @@ const MemoApiListBox = React.memo(
                   avatar={item.avatar}
                 />
               ))
-            ) : resultListArr.length > 50 ? (
-              VirtualizedListItem
             ) : null}
-          </ControlledListContainer>
+          </List>
           <Button
             sx={{
               marginTop: "10px",
